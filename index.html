@@ -161,8 +161,10 @@
   .examples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 28px 0; }
   .ex { background: #2c3578; border-radius: var(--radius); padding: 18px; text-decoration: none; color: #fff; display: block; transition: transform .2s; }
   .ex:hover { transform: translateY(-3px); }
-  .ex .thumb { aspect-ratio: 9/12; border-radius: 12px; background: linear-gradient(160deg, #6b7aa3, #3a4668); display: flex; align-items: flex-end; padding: 12px; font-size: 14px; margin-bottom: 12px; }
-  .ex .thumb span { background: #c4302b; color: #fff; padding: 4px 10px; border-radius: 6px; font-weight: 600; }
+  .ex .thumb { position: relative; overflow: hidden; aspect-ratio: 9/12; border-radius: 12px; background: linear-gradient(160deg, #6b7aa3, #3a4668); display: flex; align-items: flex-end; padding: 12px; font-size: 14px; margin-bottom: 12px; }
+  .ex .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 22%; }
+  .ex.tg .thumb img { object-position: center 85%; }
+  .ex .thumb span { position: relative; box-shadow: 0 2px 8px rgba(0,0,0,.35); background: #c4302b; color: #fff; padding: 4px 10px; border-radius: 6px; font-weight: 600; }
   .ex.tg .thumb span { background: #2a8fc9; }
   .ex b { display: block; font-size: 16px; }
   .ex small { color: #b8c0d6; }
@@ -221,6 +223,7 @@
   /* Form */
   .form { background: var(--white); color: var(--ink); border-radius: var(--radius); padding: 16px 16px 20px; max-width: 560px; margin: 28px auto 0; text-align: left; }
   .form iframe { display: block; width: 100%; border: 0; }
+  .form .form-fallback { margin: 14px 0 0; text-align: center; }
   .form .form-note { margin: 14px 0 0; font-size: 14px; line-height: 1.45; color: #4a4f5e; text-align: center; }
   .form .form-note a { color: var(--accent-dark); }
   .center { text-align: center; }
@@ -255,7 +258,7 @@
     .steps li::before { position: static; display: block; width: max-content; padding: 4px 14px; margin-bottom: 8px; }
     .pricelist div { flex-direction: column; gap: 2px; }
     .nav .brand { font-size: .95rem; }
-    .ex .thumb { aspect-ratio: 16/9; }
+    .ex .thumb { aspect-ratio: 4/3; }
   }
 
   /* ===== Motion ===== */
@@ -264,19 +267,11 @@
   @keyframes slide-in { from { opacity: 0; translate: -40px 0; } to { opacity: 1; translate: 0 0; } }
   @keyframes pop { from { opacity: 0; translate: 0 22px; scale: .94; } to { opacity: 1; translate: 0 0; scale: 1; } }
   @keyframes unmask { from { clip-path: inset(0 0 100% 0); scale: 1.14; } to { clip-path: inset(0 0 0 0); scale: 1; } }
-  @keyframes drift-a { from { translate: 0 0; scale: 1; } to { translate: 70px 50px; scale: 1.18; } }
-  @keyframes drift-b { from { translate: 0 0; scale: 1.1; } to { translate: -80px -40px; scale: .9; } }
-  @keyframes float { from { transform: translateY(0); } to { transform: translateY(-12px); } }
-  @keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(90,71,224,.5); } 70%, 100% { box-shadow: 0 0 0 18px rgba(90,71,224,0); } }
   @keyframes run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  @keyframes flow { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
-  @keyframes shine { 0%, 60% { left: -60%; } 100% { left: 130%; } }
   @keyframes fade { from { opacity: 0; translate: 0 -6px; } to { opacity: 1; translate: 0 0; } }
 
-  /* Scroll progress line */
-  .progress { position: fixed; left: 0; top: 0; width: 100%; height: 4px; z-index: 20; transform-origin: 0 50%; transform: scaleX(0); background: linear-gradient(90deg, var(--accent), #3d8fe0, var(--spark)); pointer-events: none; }
 
-  /* Hero: one orchestrated entrance, drifting colour behind it */
+  /* Hero: one orchestrated entrance */
   .hero .wrap > div:first-child > * { animation: rise .9s var(--ease) both; }
   .hero .wrap > div:first-child > :nth-child(1) { animation-delay: .05s; }
   .hero .wrap > div:first-child > :nth-child(2) { animation-delay: .15s; }
@@ -285,13 +280,10 @@
   .hero .wrap > div:first-child > :nth-child(5) { animation-delay: .47s; }
   .hero .wrap > div:first-child > :nth-child(6) { animation-delay: .57s; }
   .hero .wrap > div:first-child > :nth-child(7) { animation-delay: .67s; }
-  .hero .photo { animation: float 7s ease-in-out 1.6s infinite alternate; }
   .hero .photo img { animation: unmask 1.2s var(--ease) .25s both; }
   .hero::before, .hero::after { content: ""; position: absolute; border-radius: 50%; filter: blur(34px); pointer-events: none; }
-  .hero::before { width: 340px; height: 340px; right: 4%; top: 6%; background: #bfa8f8; opacity: .55; animation: drift-a 15s ease-in-out infinite alternate; }
-  .hero::after { width: 280px; height: 280px; right: 24%; bottom: -60px; background: #ffe477; opacity: .5; animation: drift-b 18s ease-in-out infinite alternate; }
-  .hero .actions .btn:not(.ghost) { animation: ring 2.8s ease-out 2s infinite; }
-  .hero .actions .btn:not(.ghost):hover { animation: none; }
+  .hero::before { width: 340px; height: 340px; right: 4%; top: 6%; background: #bfa8f8; opacity: .55; }
+  .hero::after { width: 280px; height: 280px; right: 24%; bottom: -60px; background: #ffe477; opacity: .5; }
 
   /* Running line of real topics */
   .ticker-wrap { overflow: hidden; padding: 18px 0; }
@@ -325,9 +317,6 @@
   }
 
   /* Accents that keep moving a little */
-  .dark { background-size: 220% 220%; animation: flow 18s ease-in-out infinite alternate; }
-  .pack .badge { overflow: hidden; }
-  .pack .badge::after { content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.75), transparent); transform: skewX(-20deg); animation: shine 5s ease-in-out 1.5s infinite; }
   details[open] > p { animation: fade .35s var(--ease); }
   .checks li::before, .never li::before { transition: transform .3s var(--ease); }
   .checks li:hover::before, .never li:hover::before { transform: scale(1.18) rotate(8deg); }
@@ -450,7 +439,6 @@
 </script>
 </head>
 <body>
-<div class="progress" aria-hidden="true"></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="i-yt" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3z"/></symbol>
@@ -583,9 +571,9 @@
       <!-- Ролик «Контент-завод» убран с сайта до решения по авторским правам (уведомление Content ID в YouTube Studio) и проверки названия канала Агнии. Файл: site-mockup/video/kontent-zavod.mp4 -->
     </div>
     <div class="examples">
-      <a class="ex" href="https://www.youtube.com/shorts/tfuCJaaZWIs" target="_blank" rel="noopener"><div class="thumb"><span><svg class="pl"><use href="#i-yt"/></svg>YouTube</span></div><b>Ипотека гарантирует безопасность сделки?</b><small>Короткое видео</small></a>
-      <a class="ex" href="https://www.youtube.com/shorts/3ZJJWxfn0uw" target="_blank" rel="noopener"><div class="thumb"><span><svg class="pl"><use href="#i-yt"/></svg>YouTube</span></div><b>Продавец требует только наличные?</b><small>Короткое видео, серия «признаки»</small></a>
-      <a class="ex tg" href="https://t.me/s/realestatinvestclub" target="_blank" rel="noopener"><div class="thumb"><span><svg class="pl"><use href="#i-tg"/></svg>Telegram</span></div><b>Как проверить доверенность перед покупкой</b><small>Развёрнутый пост с чек-листом</small></a>
+      <a class="ex" href="https://www.youtube.com/shorts/tfuCJaaZWIs" target="_blank" rel="noopener"><div class="thumb"><img src="https://i.ytimg.com/vi/tfuCJaaZWIs/oar2.jpg" alt="Кадр из ролика «Ипотека гарантирует безопасность сделки?»" loading="lazy" width="720" height="1280"><span><svg class="pl"><use href="#i-yt"/></svg>YouTube</span></div><b>Ипотека гарантирует безопасность сделки?</b><small>Короткое видео</small></a>
+      <a class="ex" href="https://www.youtube.com/shorts/3ZJJWxfn0uw" target="_blank" rel="noopener"><div class="thumb"><img src="https://i.ytimg.com/vi/3ZJJWxfn0uw/oar2.jpg" alt="Кадр из ролика «Продавец требует только наличные?»" loading="lazy" width="720" height="1280"><span><svg class="pl"><use href="#i-yt"/></svg>YouTube</span></div><b>Продавец требует только наличные?</b><small>Короткое видео, серия «признаки»</small></a>
+      <a class="ex tg" href="https://t.me/s/realestatinvestclub" target="_blank" rel="noopener"><div class="thumb"><img src="img/docs.jpg" alt="Документы на столе: пример поста с чек-листом" loading="lazy" width="933" height="1400"><span><svg class="pl"><use href="#i-tg"/></svg>Telegram</span></div><b>Как проверить доверенность перед покупкой</b><small>Развёрнутый пост с чек-листом</small></a>
     </div>
     <div class="socs">
       <a class="soc yt" href="https://www.youtube.com/@%D0%98%D0%BD%D0%B3%D0%B0%D0%A2%D0%BA%D0%B0%D1%87%D0%B5%D0%BD%D0%BA%D0%BE-2026" target="_blank" rel="noopener"><svg><use href="#i-yt"/></svg>Канал на YouTube</a>
@@ -740,6 +728,7 @@
     </ol>
     <div class="form">
       <iframe id="lead-frame" title="Форма заявки" src="https://forms.yandex.ru/u/6ac624145056902200c9004b/?iframe=1" width="100%" height="640" frameborder="0" loading="lazy"></iframe>
+      <p class="form-fallback"><a class="btn btn-small ghost" href="https://forms.yandex.ru/u/6ac624145056902200c9004b/" target="_blank" rel="noopener">Форма не открылась? Заполнить в новой вкладке</a></p>
       <p class="form-note">Заявка приходит ко мне через сервис «Яндекс Формы». <a href="privacy.html" target="_blank" rel="noopener">Политика конфиденциальности</a></p>
     </div>
   </div>
@@ -789,18 +778,6 @@
       }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
       items.forEach(function (el) { io.observe(el); });
     }
-
-    // Scroll progress line
-    var bar = document.querySelector('.progress'), queued = false;
-    var paint = function () {
-      var h = root.scrollHeight - window.innerHeight;
-      bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, window.scrollY / h) : 0) + ')';
-      queued = false;
-    };
-    window.addEventListener('scroll', function () {
-      if (!queued) { queued = true; requestAnimationFrame(paint); }
-    }, { passive: true });
-    paint();
   } catch (err) {
     root.classList.remove('js');
   }

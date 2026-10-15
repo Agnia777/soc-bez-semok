@@ -1,0 +1,5 @@
+name = "soc-bez-semok-form"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# BOT_TOKEN и CHAT_ID сюда не пишем: они задаются командой "wrangler secret put" (см. README.md)

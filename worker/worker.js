@@ -2,6 +2,8 @@
 // Токен бота и номер чата лежат в секретах Cloudflare (BOT_TOKEN, CHAT_ID), на сайте их нет.
 
 const ALLOWED_ORIGINS = [
+  'https://agniyanet.ru',
+  'https://www.agniyanet.ru',
   'https://learn-ambient-lamp.tilda.ws',
   'https://agnia777.github.io',
   'http://localhost:8080',

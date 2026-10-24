@@ -311,6 +311,11 @@
   .js .rv-left.in { animation-name: slide-in; }
   .js .rv-photo img { clip-path: inset(0 0 100% 0); }
   .js .rv-photo.in img { animation: unmask 1.1s var(--ease) both; }
+  /* Запасной вариант: если скрипт не сработал, через 4 секунды всё показывается без анимации */
+  .js .rv:not(.in) { animation: shown 0s 4s forwards; }
+  .js .rv-photo:not(.in) img { animation: shown-photo 0s 4s forwards; }
+  @keyframes shown { to { opacity: 1; } }
+  @keyframes shown-photo { to { clip-path: inset(0 0 0 0); } }
 
   /* Hover life (mouse only) */
   .card, .topic, .format, .pack, .get, .svc, .never li, .steps li, .pricelist { transition: transform .3s var(--ease), box-shadow .3s; }
@@ -738,7 +743,8 @@
       <li>Затем называю точную цену и план, а вы решаете, начинать ли.</li>
     </ol>
     <div class="form">
-      <iframe id="lead-frame" class="lead-frame" src="https://forms.yandex.ru/u/6ac624145056902200c9004b/?iframe=1" title="Форма заявки"></iframe>
+      <iframe id="lead-frame" class="lead-frame" title="Форма заявки"></iframe>
+      <noscript><p class="form-note"><a href="https://forms.yandex.ru/u/6ac624145056902200c9004b/">Открыть форму заявки</a></p></noscript>
     </div>
     <div class="contact-row">
       <p class="lead-in">Или свяжитесь напрямую</p>

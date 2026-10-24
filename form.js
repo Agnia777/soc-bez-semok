@@ -41,12 +41,27 @@
     if (row) { row.hidden = true; }
   }
 
+  /* ---------- Форма подгружается, когда до неё почти доскроллили (так странице легче на телефоне) ---------- */
+  var loaded = false;
+  function loadForm(extra) {
+    loaded = true;
+    frame.src = CONFIG.formUrl + '?iframe=1' + (extra || '');
+  }
+  function loadIfNear() {
+    if (!loaded && frame.getBoundingClientRect().top < window.innerHeight * 3) { loadForm(); }
+  }
+  window.addEventListener('scroll', loadIfNear, { passive: true });
+  window.addEventListener('touchmove', loadIfNear, { passive: true });
+  window.addEventListener('resize', loadIfNear);
+  setTimeout(function () { if (!loaded) { loadForm(); } }, 8000);
+  loadIfNear();
+
   /* ---------- Кнопки пакетов подставляют выбор в форму ---------- */
   document.querySelectorAll('[data-pack]').forEach(function (a) {
     a.addEventListener('click', function () {
       var id = PACKS[a.dataset.pack];
       if (!id) { return; }
-      frame.src = CONFIG.formUrl + '?iframe=1&' + CONFIG.packQuestion + '=' + id;
+      loadForm('&' + CONFIG.packQuestion + '=' + id);
     });
   });
 
